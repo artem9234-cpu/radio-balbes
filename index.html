@@ -38,7 +38,8 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
         
-        .disc.spinning {
+        /* ВРАЩАЕТСЯ ТОЛЬКО ПЛАСТИНКА, а не весь контейнер */
+        .vinyl.spinning {
             animation: spin 2s linear infinite;
         }
         
@@ -82,7 +83,7 @@
                 radial-gradient(circle at center, #2a2a2a 0%, #0a0a0a 100%);
         }
         
-        /* СТАТИЧНЫЕ БЛИКИ — как свет падающий на пластинку */
+        /* СТАТИЧНЫЕ БЛИКИ — находятся ОТДЕЛЬНО от вращающейся пластинки */
         .vinyl-shine {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -90,7 +91,6 @@
             pointer-events: none;
             z-index: 7;
             background: 
-                /* Основной широкий блик сверху */
                 linear-gradient(155deg, 
                     transparent 0%, 
                     transparent 38%,
@@ -102,7 +102,6 @@
                     transparent 58%,
                     transparent 100%
                 ),
-                /* Узкая яркая полоса */
                 linear-gradient(150deg,
                     transparent 0%,
                     transparent 44%,
@@ -112,7 +111,6 @@
                     transparent 51%,
                     transparent 100%
                 ),
-                /* Дополнительная тонкая полоса */
                 linear-gradient(162deg,
                     transparent 0%,
                     transparent 41%,
@@ -122,7 +120,6 @@
                     transparent 48%,
                     transparent 100%
                 ),
-                /* Контр-блик снизу для симметрии */
                 linear-gradient(335deg,
                     transparent 0%,
                     transparent 88%,
@@ -132,7 +129,6 @@
                     transparent 97%,
                     transparent 100%
                 );
-            /* Убираем блики из центра (где этикетка) */
             mask-image: radial-gradient(
                 circle at center,
                 transparent 0%,
@@ -289,8 +285,8 @@
     <div class="container">
         <h1>📻 Радио Балбес</h1>
         
-        <div class="disc" id="disc">
-            <div class="vinyl">
+        <div class="disc">
+            <div class="vinyl" id="vinyl">
                 <div class="vinyl-text">
                     <svg viewBox="0 0 320 320">
                         <defs>
@@ -310,7 +306,7 @@
                 
                 <div class="vinyl-hole"></div>
             </div>
-            <!-- БЛИКИ ОТДЕЛЬНО — не вращаются вместе с диском -->
+            <!-- Блики находятся снаружи vinyl — НЕ вращаются -->
             <div class="vinyl-shine"></div>
         </div>
         
@@ -345,16 +341,16 @@
             const btn = document.getElementById('playBtn');
             btn.textContent = '▶ Включить';
             btn.classList.remove('playing');
-            document.getElementById('disc').classList.remove('spinning');
+            document.getElementById('vinyl').classList.remove('spinning');
         }
         
         async function togglePlay() {
             const btn = document.getElementById('playBtn');
-            const disc = document.getElementById('disc');
+            const vinyl = document.getElementById('vinyl');
             
             if (isPlaying) {
                 stopPlayback();
-                setStatus(' Остановлено', '');
+                setStatus('⏸ Остановлено', '');
                 return;
             }
             
@@ -388,8 +384,8 @@
             isPlaying = true;
             btn.textContent = '⏸ Пауза';
             btn.classList.add('playing');
-            disc.classList.add('spinning');
-            setStatus(usingBackup ? ' Играет (backup)' : '🔊 Играет', 'success');
+            vinyl.classList.add('spinning');
+            setStatus(usingBackup ? '🔊 Играет (backup)' : '🔊 Играет', 'success');
             btn.disabled = false;
         }
         
