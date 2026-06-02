@@ -17,22 +17,14 @@
             align-items: center;
             padding: 20px;
         }
-        .container {
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+        .container { width: 100%; max-width: 400px; text-align: center; }
         h1 { font-size: 28px; margin-bottom: 10px; }
         .disc {
-            width: 200px;
-            height: 200px;
-            margin: 30px auto;
+            width: 200px; height: 200px; margin: 30px auto;
             background: conic-gradient(#667eea, #764ba2, #f093fb, #667eea);
             border-radius: 50%;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
         .disc.spinning { animation: spin 2s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -48,7 +40,7 @@
             padding: 12px;
             margin: 5px 0;
             background: rgba(255,255,255,0.2);
-            border: none;
+            border: 2px solid transparent;
             border-radius: 10px;
             color: #fff;
             font-size: 16px;
@@ -56,7 +48,12 @@
             transition: all 0.3s;
         }
         .station-btn:hover { background: rgba(255,255,255,0.3); }
-        .station-btn.active { background: #fff; color: #667eea; }
+        .station-btn.active { 
+            background: rgba(255,255,255,0.9); 
+            color: #667eea;
+            border-color: #fff;
+            font-weight: bold;
+        }
         .play-btn {
             padding: 15px 50px;
             background: #fff;
@@ -67,14 +64,19 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
+        .play-btn:active { transform: scale(0.95); }
         .status {
             margin-top: 15px;
             padding: 10px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.3);
             border-radius: 10px;
             font-size: 14px;
+            min-height: 40px;
         }
+        .status.error { background: rgba(255,0,0,0.3); border: 1px solid rgba(255,0,0,0.5); }
+        .status.success { background: rgba(0,255,0,0.3); border: 1px solid rgba(0,255,0,0.5); }
     </style>
 </head>
 <body>
@@ -83,7 +85,7 @@
         <div class="disc" id="disc"><div style="width:60px;height:60px;background:rgba(0,0,0,0.3);border-radius:50%"></div></div>
         
         <div class="station-list">
-            <button class="station-btn" onclick="selectStation('record')">🎵 Record Big Hits</button>
+            <button class="station-btn active" onclick="selectStation('record')">🎵 Record Big Hits</button>
             <button class="station-btn" onclick="selectStation('record-deep')">🎧 Record Deep</button>
             <button class="station-btn" onclick="selectStation('europa')">🎶 Europa Plus</button>
             <button class="station-btn" onclick="selectStation('dfm')">🔥 DFM</button>
@@ -91,7 +93,7 @@
         </div>
         
         <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ Включить</button>
-        <div class="status" id="status">Выберите станцию</div>
+        <div class="status" id="status">Выберите станцию и нажмите "Включить"</div>
     </div>
 
     <script>
@@ -99,55 +101,152 @@
         tg.ready();
         tg.expand();
         
-        const audio = new Audio();
-        audio.crossOrigin = "anonymous";
-        
-        const stations = {
-            'record': 'https://rr-record-ice.castplus.ru/bighits',
-            'record-deep': 'https://radiorecord.hostingradio.ru/deep96',
-            'europa': 'https://ep256.hostingradio.ru:8042/ep256',
-            'dfm': 'https://dfm.hostingradio.ru/dfm96',
-            'energy': 'https://energy.hostingradio.ru/energy96'
-        };
-        
-        let currentStation = null;
+        let audio = null;
+        let currentStation = 'record';
         let isPlaying = false;
         
+        // Актуальные ссылки на потоки (MP3 для совместимости)
+        const stations = {
+            'record': {
+                name: 'Record Big Hits',
+                url: 'https://radiorecord.hostingradio.ru/bighits96.aacp',
+                backup: 'https://rr-record-ice.castplus.ru/bighits'
+            },
+            'record-deep': {
+                name: 'Record Deep',
+                url: 'https://radiorecord.hostingradio.ru/deep96.aacp',
+                backup: 'https://radiorecord.hostingradio.ru/deep'
+            },
+            'europa': {
+                name: 'Europa Plus',
+                url: 'https://ep256.hostingradio.ru:8042/ep256',
+                backup: 'https://europaplus.hostingradio.ru/europaplus128.mp3'
+            },
+            'dfm': {
+                name: 'DFM',
+                url: 'https://dfm.hostingradio.ru/dfm96',
+                backup: 'https://dfm.hostingradio.ru/dfm'
+            },
+            'energy': {
+                name: 'Energy (NRJ)',
+                url: 'https://energy.hostingradio.ru/energy96',
+                backup: 'https://nrj.hostingradio.ru/nrj'
+            }
+        };
+        
         function selectStation(station) {
+            if (isPlaying) {
+                stopPlayback();
+            }
             currentStation = station;
             document.querySelectorAll('.station-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-            document.getElementById('status').textContent = 'Выбрана: ' + event.target.textContent;
-            if (isPlaying) togglePlay();
+            setStatus(`Выбрана: ${stations[station].name}`, '');
         }
         
-        function togglePlay() {
-            if (!currentStation) {
-                document.getElementById('status').textContent = '❌ Выберите станцию!';
-                return;
+        function setStatus(message, type = '') {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + type;
+            console.log('[Radio] ' + message);
+        }
+        
+        function stopPlayback() {
+            if (audio) {
+                audio.pause();
+                audio = null;
             }
-            
+            isPlaying = false;
+            document.getElementById('playBtn').textContent = '▶ Включить';
+            document.getElementById('disc').classList.remove('spinning');
+        }
+        
+        async function togglePlay() {
             const btn = document.getElementById('playBtn');
             const disc = document.getElementById('disc');
             
             if (isPlaying) {
-                audio.pause();
-                btn.textContent = '▶ Включить';
-                disc.classList.remove('spinning');
-                isPlaying = false;
-                document.getElementById('status').textContent = '⏸ Остановлено';
-            } else {
-                if (!audio.src) audio.src = stations[currentStation];
-                
-                audio.play().then(() => {
-                    btn.textContent = '⏸ Пауза';
-                    disc.classList.add('spinning');
-                    isPlaying = true;
-                    document.getElementById('status').textContent = '🔊 Играет';
-                }).catch(err => {
-                    document.getElementById('status').textContent = '❌ Ошибка: ' + err.message;
-                });
+                stopPlayback();
+                setStatus('⏸ Остановлено', '');
+                return;
             }
+            
+            // Создаем новый аудио элемент
+            audio = new Audio();
+            audio.crossOrigin = "anonymous";
+            audio.preload = "auto";
+            
+            const station = stations[currentStation];
+            let streamUrl = station.url;
+            let usingBackup = false;
+            
+            setStatus('🔄 Подключение...', '');
+            btn.textContent = '⏳ Загрузка...';
+            btn.disabled = true;
+            
+            // Пробуем основной поток
+            try {
+                await tryPlayStream(streamUrl);
+            } catch (error) {
+                console.log('Основной поток не сработал, пробуем backup...');
+                usingBackup = true;
+                streamUrl = station.backup;
+                try {
+                    await tryPlayStream(streamUrl);
+                } catch (error2) {
+                    setStatus('❌ Ошибка: поток недоступен. Попробуйте другую станцию.', 'error');
+                    btn.textContent = '▶ Включить';
+                    btn.disabled = false;
+                    return;
+                }
+            }
+            
+            // Если дошли сюда - всё работает
+            isPlaying = true;
+            btn.textContent = '⏸ Пауза';
+            disc.classList.add('spinning');
+            setStatus(usingBackup ? '🔊 Играет (backup поток)' : '🔊 Играет', 'success');
+            btn.disabled = false;
+        }
+        
+        function tryPlayStream(url) {
+            return new Promise((resolve, reject) => {
+                if (!audio) {
+                    audio = new Audio();
+                    audio.crossOrigin = "anonymous";
+                }
+                
+                audio.src = url;
+                
+                const timeout = setTimeout(() => {
+                    reject(new Error('Превышено время подключения'));
+                }, 10000);
+                
+                audio.addEventListener('canplay', () => {
+                    clearTimeout(timeout);
+                    audio.play().then(() => {
+                        resolve();
+                    }).catch(err => {
+                        clearTimeout(timeout);
+                        reject(err);
+                    });
+                }, { once: true });
+                
+                audio.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    reject(new Error('Ошибка потока'));
+                }, { once: true });
+                
+                audio.load();
+            });
+        }
+        
+        // Обработка ошибок
+        if (audio) {
+            audio.addEventListener('error', (e) => {
+                console.error('Audio error:', e);
+                setStatus('⚠️ Ошибка потока', 'error');
+            });
         }
     </script>
 </body>
