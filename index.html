@@ -8,7 +8,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            /* БЕЛЫЙ ФОН вместо градиента */
             background: #ffffff;
             color: #333;
             font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -28,10 +27,8 @@
             font-size: 32px; 
             margin-bottom: 40px;
             color: #333;
-            text-shadow: none;
         }
         
-        /* Виниловая пластинка */
         .disc {
             width: 320px;
             height: 320px;
@@ -90,7 +87,6 @@
             box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
         }
         
-        /* Текст БАЛБЕСЫ по кругу */
         .vinyl-text {
             position: absolute;
             width: 100%;
@@ -104,12 +100,11 @@
         
         .vinyl-text text {
             fill: rgba(255, 255, 255, 0.9);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
-            letter-spacing: 4px; /* Увеличил интервал */
+            letter-spacing: 2px;
         }
         
-        /* Центральная этикетка с картинкой */
         .vinyl-label {
             position: absolute;
             width: 130px;
@@ -132,7 +127,6 @@
             object-position: center;
         }
         
-        /* Центральное отверстие */
         .vinyl-hole {
             position: absolute;
             width: 16px;
@@ -147,7 +141,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Анимированная кнопка */
         .play-btn {
             padding: 20px 60px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -214,26 +207,23 @@
         
         <div class="disc" id="disc">
             <div class="vinyl">
-                <!-- Текст БАЛБЕСЫ по кругу - 4 повторения с равномерным распределением -->
                 <div class="vinyl-text">
                     <svg viewBox="0 0 320 320">
                         <defs>
-                            <path id="circlePath" d="M 160, 55 A 105,105 0 1,1 159.9,55 Z" />
+                            <path id="circlePath" d="M 160, 50 A 110,110 0 1,1 159.9,50 Z" />
                         </defs>
                         <text>
                             <textPath href="#circlePath" startOffset="0%">
-                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ
+                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ
                             </textPath>
                         </text>
                     </svg>
                 </div>
                 
-                <!-- Центральная этикетка с картинкой -->
                 <div class="vinyl-label">
                     <img src="label.png" alt="Label">
                 </div>
                 
-                <!-- Центральное отверстие -->
                 <div class="vinyl-hole"></div>
             </div>
         </div>
@@ -250,7 +240,6 @@
         let audio = null;
         let isPlaying = false;
         
-        // Только Record Big Hits (основной + backup)
         const streamUrl = 'https://radiorecord.hostingradio.ru/bighits96.aacp';
         const backupUrl = 'https://rr-record-ice.castplus.ru/bighits';
         
