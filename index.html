@@ -15,21 +15,30 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             padding: 20px;
         }
-        .container { width: 100%; max-width: 400px; text-align: center; }
-        h1 { font-size: 28px; margin-bottom: 10px; }
+        .container { 
+            width: 100%; 
+            max-width: 500px; 
+            text-align: center; 
+        }
+        h1 { 
+            font-size: 32px; 
+            margin-bottom: 40px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
         
-        /* Виниловая пластинка */
+        /* Виниловая пластинка - УВЕЛИЧЕННАЯ */
         .disc {
-            width: 220px;
-            height: 220px;
-            margin: 30px auto;
+            width: 320px;
+            height: 320px;
+            margin: 0 auto 50px;
             position: relative;
             border-radius: 50%;
             box-shadow: 
-                0 10px 40px rgba(0,0,0,0.5),
-                inset 0 0 0 2px rgba(255,255,255,0.1);
+                0 20px 60px rgba(0,0,0,0.6),
+                inset 0 0 0 3px rgba(255,255,255,0.1);
         }
         
         .disc.spinning {
@@ -59,14 +68,24 @@
                     #2a2a2a 78px, #1a1a1a 80px, #2a2a2a 82px,
                     #1a1a1a 84px, #2a2a2a 86px, #1a1a1a 88px,
                     #2a2a2a 90px, #1a1a1a 92px, #2a2a2a 94px,
-                    #1a1a1a 96px, #2a2a2a 98px, #1a1a1a 100px
+                    #1a1a1a 96px, #2a2a2a 98px, #1a1a1a 100px,
+                    #2a2a2a 102px, #1a1a1a 104px, #2a2a2a 106px,
+                    #1a1a1a 108px, #2a2a2a 110px, #1a1a1a 112px,
+                    #2a2a2a 114px, #1a1a1a 116px, #2a2a2a 118px,
+                    #1a1a1a 120px, #2a2a2a 122px, #1a1a1a 124px,
+                    #2a2a2a 126px, #1a1a1a 128px, #2a2a2a 130px,
+                    #1a1a1a 132px, #2a2a2a 134px, #1a1a1a 136px,
+                    #2a2a2a 138px, #1a1a1a 140px, #2a2a2a 142px,
+                    #1a1a1a 144px, #2a2a2a 146px, #1a1a1a 148px,
+                    #2a2a2a 150px, #1a1a1a 152px, #2a2a2a 154px,
+                    #1a1a1a 156px, #2a2a2a 158px
                 ),
                 radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 100%);
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
         }
         
         /* Текст БАЛБЕСЫ по кругу */
@@ -83,25 +102,25 @@
         
         .vinyl-text text {
             fill: rgba(255, 255, 255, 0.85);
-            font-size: 13px;
+            font-size: 16px;
             font-weight: bold;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
         
         /* Центральная этикетка с картинкой */
         .vinyl-label {
             position: absolute;
-            width: 95px;
-            height: 95px;
+            width: 130px;
+            height: 130px;
             border-radius: 50%;
             overflow: hidden;
             z-index: 10;
             background: #fff;
             box-shadow: 
-                0 0 0 6px #1a1a1a,
-                0 0 0 8px #2a2a2a,
-                0 0 0 10px #1a1a1a,
-                0 5px 15px rgba(0,0,0,0.5);
+                0 0 0 8px #1a1a1a,
+                0 0 0 11px #2a2a2a,
+                0 0 0 14px #1a1a1a,
+                0 10px 25px rgba(0,0,0,0.6);
         }
         
         .vinyl-label img {
@@ -114,55 +133,76 @@
         /* Центральное отверстие */
         .vinyl-hole {
             position: absolute;
-            width: 12px;
-            height: 12px;
+            width: 16px;
+            height: 16px;
             background: #0a0a0a;
             border-radius: 50%;
             z-index: 11;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 6px rgba(0,0,0,0.9);
         }
         
         @keyframes spin {
             100% { transform: rotate(360deg); }
         }
         
-        .track-info {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            min-height: 50px;
-            padding: 0 10px;
-            line-height: 1.4;
-        }
-        .artist-info {
-            font-size: 16px;
-            color: rgba(255,255,255,0.8);
-            margin-bottom: 30px;
-            min-height: 25px;
-        }
+        /* Анимированная кнопка с пульсацией */
         .play-btn {
-            padding: 15px 50px;
-            background: #fff;
-            color: #667eea;
+            padding: 20px 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
             border: none;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+            transition: all 0.3s ease;
         }
-        .play-btn:active { transform: scale(0.95); }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.7);
+            }
+        }
+        
+        .play-btn:active { 
+            transform: scale(0.95);
+            animation: none;
+        }
+        
+        .play-btn.playing {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.5);
+            animation: none;
+        }
+        
         .status {
-            margin-top: 15px;
-            padding: 10px;
+            margin-top: 25px;
+            padding: 12px 25px;
             background: rgba(0,0,0,0.3);
             border-radius: 10px;
             font-size: 14px;
-            min-height: 40px;
+            min-height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .status.error { background: rgba(255,0,0,0.3); border: 1px solid rgba(255,0,0,0.5); }
         .status.success { background: rgba(0,255,0,0.3); border: 1px solid rgba(0,255,0,0.5); }
+        
+        @media (max-width: 480px) {
+            .disc { width: 260px; height: 260px; }
+            .vinyl-label { width: 100px; height: 100px; }
+            h1 { font-size: 26px; margin-bottom: 30px; }
+            .play-btn { padding: 18px 50px; font-size: 18px; }
+        }
     </style>
 </head>
 <body>
@@ -173,13 +213,13 @@
             <div class="vinyl">
                 <!-- Текст БАЛБЕСЫ по кругу -->
                 <div class="vinyl-text">
-                    <svg viewBox="0 0 220 220">
+                    <svg viewBox="0 0 320 320">
                         <defs>
-                            <path id="circlePath" d="M 110, 35 A 75,75 0 1,1 109.9,35 Z" />
+                            <path id="circlePath" d="M 160, 50 A 110,110 0 1,1 159.9,50 Z" />
                         </defs>
                         <text>
                             <textPath href="#circlePath" startOffset="0%">
-                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • 
+                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • 
                             </textPath>
                         </text>
                     </svg>
@@ -194,9 +234,6 @@
                 <div class="vinyl-hole"></div>
             </div>
         </div>
-        
-        <div class="track-info" id="track-name">Нажмите "Включить"</div>
-        <div class="artist-info" id="artist-name">для начала прослушивания</div>
         
         <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ Включить</button>
         <div class="status" id="status">Готово к работе</div>
@@ -227,7 +264,9 @@
                 audio = null;
             }
             isPlaying = false;
-            document.getElementById('playBtn').textContent = '▶ Включить';
+            const btn = document.getElementById('playBtn');
+            btn.textContent = '▶ Включить';
+            btn.classList.remove('playing');
             document.getElementById('disc').classList.remove('spinning');
         }
         
@@ -238,8 +277,6 @@
             if (isPlaying) {
                 stopPlayback();
                 setStatus('⏸ Остановлено', '');
-                document.getElementById('track-name').textContent = 'Нажмите "Включить"';
-                document.getElementById('artist-name').textContent = 'для начала прослушивания';
                 return;
             }
             
@@ -272,10 +309,9 @@
             
             isPlaying = true;
             btn.textContent = '⏸ Пауза';
+            btn.classList.add('playing');
             disc.classList.add('spinning');
             setStatus(usingBackup ? '🔊 Играет (backup)' : '🔊 Играет', 'success');
-            document.getElementById('track-name').textContent = 'Играет Radio Record';
-            document.getElementById('artist-name').textContent = 'Big Hits';
             btn.disabled = false;
         }
         
