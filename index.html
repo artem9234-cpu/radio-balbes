@@ -49,7 +49,6 @@
             height: 100%;
             border-radius: 50%;
             background: 
-                /* Гроты пластинки */
                 repeating-radial-gradient(
                     circle at center,
                     #1a1a1a 0px, #2a2a2a 2px, #1a1a1a 4px,
@@ -89,35 +88,27 @@
             overflow: hidden;
         }
         
-        /* БЛИКИ И СВЕЧЕНИЕ */
+        /* БЛИКИ НА ПЛАСТИНКЕ */
         .vinyl::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             border-radius: 50%;
-            background: 
-                /* Основной блик от света */
-                linear-gradient(135deg, 
-                    rgba(255,255,255,0.15) 0%, 
-                    rgba(255,255,255,0) 40%,
-                    rgba(255,255,255,0) 60%, 
-                    rgba(255,255,255,0.1) 100%
-                );
+            background: linear-gradient(135deg, 
+                rgba(255,255,255,0.15) 0%, 
+                rgba(255,255,255,0) 40%,
+                rgba(255,255,255,0) 60%, 
+                rgba(255,255,255,0.1) 100%
+            );
             pointer-events: none;
             z-index: 5;
         }
         
-        /* Дополнительный блик для эффекта винила */
         .vinyl::after {
             content: '';
             position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 80%;
-            height: 40%;
+            top: 10%; left: 10%;
+            width: 80%; height: 40%;
             background: linear-gradient(180deg,
                 rgba(255,255,255,0.08) 0%,
                 rgba(255,255,255,0) 100%
@@ -128,18 +119,13 @@
             z-index: 4;
         }
         
-        /* Анимированный блик при вращении */
         .disc.spinning .vinyl::before {
             animation: shimmer 2s linear infinite;
         }
         
         @keyframes shimmer {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .vinyl-text {
@@ -158,7 +144,6 @@
             fill: rgba(255, 255, 255, 0.9);
             font-size: 14px;
             font-weight: bold;
-            letter-spacing: 2px;
         }
         
         .vinyl-label {
@@ -179,10 +164,7 @@
         .vinyl-label::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(135deg,
                 rgba(255,255,255,0.3) 0%,
                 rgba(255,255,255,0) 50%,
@@ -281,15 +263,18 @@
         
         <div class="disc" id="disc">
             <div class="vinyl">
+                <!-- Текст БАЛБЕСЫ по кругу с РОВНЫМ распределением через textLength -->
                 <div class="vinyl-text">
                     <svg viewBox="0 0 320 320">
                         <defs>
-                            <path id="circlePath" d="M 160, 50 A 110,110 0 1,1 159.9,50 Z" />
+                            <!-- Полная окружность (длина = 2 * π * 110 ≈ 691) -->
+                            <path id="circlePath" d="M 160, 50 A 110,110 0 1,1 159.99,50 Z" />
                         </defs>
                         <text>
-                            <textPath href="#circlePath" startOffset="0%">
-                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ
-                            </textPath>
+                            <textPath href="#circlePath" 
+                                      startOffset="0%" 
+                                      textLength="691" 
+                                      lengthAdjust="spacing">БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ</textPath>
                         </text>
                     </svg>
                 </div>
@@ -353,8 +338,8 @@
             let streamUrlToUse = streamUrl;
             let usingBackup = false;
             
-            setStatus('🔄 Подключение...', '');
-            btn.textContent = '⏳ Загрузка...';
+            setStatus(' Подключение...', '');
+            btn.textContent = ' Загрузка...';
             btn.disabled = true;
             
             try {
@@ -374,7 +359,7 @@
             }
             
             isPlaying = true;
-            btn.textContent = '⏸ Пауза';
+            btn.textContent = ' Пауза';
             btn.classList.add('playing');
             disc.classList.add('spinning');
             setStatus(usingBackup ? '🔊 Играет (backup)' : '🔊 Играет', 'success');
@@ -416,7 +401,7 @@
         if (audio) {
             audio.addEventListener('error', (e) => {
                 console.error('Audio error:', e);
-                setStatus('⚠️ Ошибка потока', 'error');
+                setStatus('️ Ошибка потока', 'error');
             });
         }
         
