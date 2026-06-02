@@ -28,31 +28,19 @@
         }
         .disc.spinning { animation: spin 2s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        .station-list {
-            margin: 20px 0;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 15px;
+        .track-info {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            min-height: 50px;
+            padding: 0 10px;
+            line-height: 1.4;
         }
-        .station-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin: 5px 0;
-            background: rgba(255,255,255,0.2);
-            border: 2px solid transparent;
-            border-radius: 10px;
-            color: #fff;
+        .artist-info {
             font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .station-btn:hover { background: rgba(255,255,255,0.3); }
-        .station-btn.active { 
-            background: rgba(255,255,255,0.9); 
-            color: #667eea;
-            border-color: #fff;
-            font-weight: bold;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 30px;
+            min-height: 25px;
         }
         .play-btn {
             padding: 15px 50px;
@@ -84,16 +72,11 @@
         <h1>📻 Радио Балбес</h1>
         <div class="disc" id="disc"><div style="width:60px;height:60px;background:rgba(0,0,0,0.3);border-radius:50%"></div></div>
         
-        <div class="station-list">
-            <button class="station-btn active" onclick="selectStation('record')">🎵 Record Big Hits</button>
-            <button class="station-btn" onclick="selectStation('record-deep')">🎧 Record Deep</button>
-            <button class="station-btn" onclick="selectStation('europa')">🎶 Europa Plus</button>
-            <button class="station-btn" onclick="selectStation('dfm')">🔥 DFM</button>
-            <button class="station-btn" onclick="selectStation('energy')">⚡ Energy</button>
-        </div>
+        <div class="track-info" id="track-name">Нажмите "Включить"</div>
+        <div class="artist-info" id="artist-name">для начала прослушивания</div>
         
         <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ Включить</button>
-        <div class="status" id="status">Выберите станцию и нажмите "Включить"</div>
+        <div class="status" id="status">Готово к работе</div>
     </div>
 
     <script>
@@ -102,47 +85,11 @@
         tg.expand();
         
         let audio = null;
-        let currentStation = 'record';
         let isPlaying = false;
         
-        // Актуальные ссылки на потоки (MP3 для совместимости)
-        const stations = {
-            'record': {
-                name: 'Record Big Hits',
-                url: 'https://radiorecord.hostingradio.ru/bighits96.aacp',
-                backup: 'https://rr-record-ice.castplus.ru/bighits'
-            },
-            'record-deep': {
-                name: 'Record Deep',
-                url: 'https://radiorecord.hostingradio.ru/deep96.aacp',
-                backup: 'https://radiorecord.hostingradio.ru/deep'
-            },
-            'europa': {
-                name: 'Europa Plus',
-                url: 'https://ep256.hostingradio.ru:8042/ep256',
-                backup: 'https://europaplus.hostingradio.ru/europaplus128.mp3'
-            },
-            'dfm': {
-                name: 'DFM',
-                url: 'https://dfm.hostingradio.ru/dfm96',
-                backup: 'https://dfm.hostingradio.ru/dfm'
-            },
-            'energy': {
-                name: 'Energy (NRJ)',
-                url: 'https://energy.hostingradio.ru/energy96',
-                backup: 'https://nrj.hostingradio.ru/nrj'
-            }
-        };
-        
-        function selectStation(station) {
-            if (isPlaying) {
-                stopPlayback();
-            }
-            currentStation = station;
-            document.querySelectorAll('.station-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            setStatus(`Выбрана: ${stations[station].name}`, '');
-        }
+        // Только Record Big Hits (основной + backup)
+        const streamUrl = 'https://radiorecord.hostingradio.ru/bighits96.aacp';
+        const backupUrl = 'https://rr-record-ice.castplus.ru/bighits';
         
         function setStatus(message, type = '') {
             const statusEl = document.getElementById('status');
@@ -168,6 +115,8 @@
             if (isPlaying) {
                 stopPlayback();
                 setStatus('⏸ Остановлено', '');
+                document.getElementById('track-name').textContent = 'Нажмите "Включить"';
+                document.getElementById('artist-name').textContent = 'для начала прослушивания';
                 return;
             }
             
@@ -176,8 +125,7 @@
             audio.crossOrigin = "anonymous";
             audio.preload = "auto";
             
-            const station = stations[currentStation];
-            let streamUrl = station.url;
+            let streamUrlToUse = streamUrl;
             let usingBackup = false;
             
             setStatus('🔄 Подключение...', '');
@@ -186,15 +134,15 @@
             
             // Пробуем основной поток
             try {
-                await tryPlayStream(streamUrl);
+                await tryPlayStream(streamUrlToUse);
             } catch (error) {
                 console.log('Основной поток не сработал, пробуем backup...');
                 usingBackup = true;
-                streamUrl = station.backup;
+                streamUrlToUse = backupUrl;
                 try {
-                    await tryPlayStream(streamUrl);
+                    await tryPlayStream(streamUrlToUse);
                 } catch (error2) {
-                    setStatus('❌ Ошибка: поток недоступен. Попробуйте другую станцию.', 'error');
+                    setStatus('❌ Ошибка: поток недоступен', 'error');
                     btn.textContent = '▶ Включить';
                     btn.disabled = false;
                     return;
@@ -205,7 +153,9 @@
             isPlaying = true;
             btn.textContent = '⏸ Пауза';
             disc.classList.add('spinning');
-            setStatus(usingBackup ? '🔊 Играет (backup поток)' : '🔊 Играет', 'success');
+            setStatus(usingBackup ? '🔊 Играет (backup)' : '🔊 Играет', 'success');
+            document.getElementById('track-name').textContent = 'Играет Radio Record';
+            document.getElementById('artist-name').textContent = 'Big Hits';
             btn.disabled = false;
         }
         
@@ -248,6 +198,10 @@
                 setStatus('⚠️ Ошибка потока', 'error');
             });
         }
+        
+        // Инициализация
+        setStatus('✅ Готово к работе', 'success');
+        console.log('[Radio] App initialized');
     </script>
 </body>
 </html>
