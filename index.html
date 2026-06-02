@@ -42,7 +42,9 @@
             cursor: pointer; transition: transform 0.2s;
         }
         .btn-play:active { transform: scale(0.95); }
+        .btn-play.playing { background-color: #ff3b30; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .error { color: #ff3b30; margin-top: 10px; font-size: 14px; }
         audio { display: none; }
     </style>
 </head>
@@ -51,54 +53,104 @@
         <h1>📻 Радио Балбес</h1>
         <div class="status">Record Big Hits • Live</div>
         <div class="disc" id="disc"><div class="center-circle"></div></div>
-        <div class="track-info" id="track-name">Загрузка...</div>
-        <div class="artist-info" id="artist-name">Подожди...</div>
+        <div class="track-info" id="track-name">Нажми "Включить"</div>
+        <div class="artist-info" id="artist-name">для прослушивания</div>
         <button class="btn-play" id="playBtn" onclick="togglePlay()">▶ Включить</button>
+        <div class="error" id="errorMsg"></div>
     </div>
-    <audio id="radio" src="https://radiorecord.hostingradio.ru/bighits.aacp"></audio>
+    
+    <!-- Используем MP3 поток вместо AAC для лучшей совместимости -->
+    <audio id="radio" preload="none" crossorigin="anonymous"></audio>
+    
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.setHeaderColor('#1c1c1e');
         tg.setBackgroundColor('#1c1c1e');
+        tg.expand(); // Разворачиваем на весь экран
+        
         const audio = document.getElementById('radio');
         const playBtn = document.getElementById('playBtn');
         const disc = document.getElementById('disc');
         const trackNameEl = document.getElementById('track-name');
         const artistNameEl = document.getElementById('artist-name');
+        const errorMsg = document.getElementById('errorMsg');
+        
         let isPlaying = false;
+        // Используем MP3 поток - более совместимый формат
+        const streamUrl = 'https://radiorecord.hostingradio.ru/bighits96';
+        
         function togglePlay() {
+            errorMsg.textContent = '';
+            
+            if (isPlaying) {
+                // Пауза
+                audio.pause();
+                playBtn.innerText = '▶ Включить';
+                playBtn.classList.remove('playing');
+                disc.classList.remove('spinning');
+                isPlaying = false;
+            } else {
+                // Воспроизведение
+                playBtn.innerText = '⏸ Загрузка...';
+                
+                // Устанавливаем источник только при первом клике (требование браузеров)
+                if (!audio.src) {
+                    audio.src = streamUrl;
+                }
+                
+                audio.play().then(() => {
+                    playBtn.innerText = '⏸ Пауза';
+                    playBtn.classList.add('playing');
+                    disc.classList.add('spinning');
+                    isPlaying = true;
+                    trackNameEl.textContent = 'Играет Radio Record';
+                    artistNameEl.textContent = 'Big Hits';
+                }).catch(error => {
+                    console.error('Ошибка воспроизведения:', error);
+                    playBtn.innerText = '▶ Включить';
+                    errorMsg.textContent = '⚠️ Не удалось запустить поток. Попробуйте ещё раз.';
+                });
+            }
+        }
+        
+        // Обработка ошибок аудио
+        audio.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
             if (isPlaying) {
                 audio.pause();
                 playBtn.innerText = '▶ Включить';
-                playBtn.style.backgroundColor = 'var(--tg-theme-button-color)';
+                playBtn.classList.remove('playing');
                 disc.classList.remove('spinning');
-            } else {
-                audio.play().catch(e => { console.error(e); tg.showAlert('Не удалось запустить звук :('); });
-                playBtn.innerText = '⏸ Пауза';
-                playBtn.style.backgroundColor = '#ff3b30';
-                disc.classList.add('spinning');
+                isPlaying = false;
+                errorMsg.textContent = '⚠️ Ошибка потока. Проверьте интернет.';
             }
-            isPlaying = !isPlaying;
-        }
+        });
+        
+        // Обновление информации о треке
         async function updateTrackInfo() {
             try {
                 const response = await fetch('https://radiorecord.ru/api/station/history/?id=bighits');
                 const data = await response.json();
+                
                 if (data && data.items && data.items.length > 0) {
                     const currentTrack = data.items[0];
                     const parts = currentTrack.name.split(' - ');
-                    let artist = 'Radio Record';
-                    let title = currentTrack.name;
-                    if (parts.length > 1) { artist = parts[0]; title = parts.slice(1).join(' - '); }
-                    trackNameEl.innerText = title;
-                    artistNameEl.innerText = artist;
+                    
+                    if (parts.length > 1) {
+                        artistNameEl.textContent = parts[0];
+                        trackNameEl.textContent = parts.slice(1).join(' - ');
+                    } else {
+                        trackNameEl.textContent = currentTrack.name;
+                        artistNameEl.textContent = 'Radio Record';
+                    }
                 }
             } catch (error) {
-                trackNameEl.innerText = 'Radio Record';
-                artistNameEl.innerText = 'Big Hits';
+                console.log('API Error:', error);
             }
         }
+        
+        // Обновляем инфо раз в 10 секунд
         updateTrackInfo();
         setInterval(updateTrackInfo, 10000);
     </script>
