@@ -263,12 +263,12 @@
         
         <div class="disc" id="disc">
             <div class="vinyl">
-                <!-- Текст БАЛБЕСЫ по кругу с РОВНЫМ распределением через textLength -->
+                <!-- Текст БАЛБЕСЫ по кругу с ИДЕАЛЬНЫМ замкнутым путём -->
                 <div class="vinyl-text">
                     <svg viewBox="0 0 320 320">
                         <defs>
-                            <!-- Полная окружность (длина = 2 * π * 110 ≈ 691) -->
-                            <path id="circlePath" d="M 160, 50 A 110,110 0 1,1 159.99,50 Z" />
+                            <!-- Идеально замкнутый круг из двух полукругов -->
+                            <path id="circlePath" d="M 160, 50 A 110,110 0 0,1 160, 270 A 110,110 0 0,1 160, 50" />
                         </defs>
                         <text>
                             <textPath href="#circlePath" 
@@ -327,7 +327,7 @@
             
             if (isPlaying) {
                 stopPlayback();
-                setStatus('⏸ Остановлено', '');
+                setStatus(' Остановлено', '');
                 return;
             }
             
@@ -338,8 +338,8 @@
             let streamUrlToUse = streamUrl;
             let usingBackup = false;
             
-            setStatus(' Подключение...', '');
-            btn.textContent = ' Загрузка...';
+            setStatus('🔄 Подключение...', '');
+            btn.textContent = '⏳ Загрузка...';
             btn.disabled = true;
             
             try {
@@ -359,10 +359,10 @@
             }
             
             isPlaying = true;
-            btn.textContent = ' Пауза';
+            btn.textContent = '⏸ Пауза';
             btn.classList.add('playing');
             disc.classList.add('spinning');
-            setStatus(usingBackup ? '🔊 Играет (backup)' : '🔊 Играет', 'success');
+            setStatus(usingBackup ? ' Играет (backup)' : '🔊 Играет', 'success');
             btn.disabled = false;
         }
         
@@ -401,7 +401,7 @@
         if (audio) {
             audio.addEventListener('error', (e) => {
                 console.error('Audio error:', e);
-                setStatus('️ Ошибка потока', 'error');
+                setStatus('⚠️ Ошибка потока', 'error');
             });
         }
         
