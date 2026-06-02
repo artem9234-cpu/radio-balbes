@@ -43,57 +43,23 @@
             background: 
                 repeating-radial-gradient(
                     circle at center,
-                    #1a1a1a 0px,
-                    #2a2a2a 2px,
-                    #1a1a1a 4px,
-                    #2a2a2a 6px,
-                    #1a1a1a 8px,
-                    #2a2a2a 10px,
-                    #1a1a1a 12px,
-                    #2a2a2a 14px,
-                    #1a1a1a 16px,
-                    #2a2a2a 18px,
-                    #1a1a1a 20px,
-                    #2a2a2a 22px,
-                    #1a1a1a 24px,
-                    #2a2a2a 26px,
-                    #1a1a1a 28px,
-                    #2a2a2a 30px,
-                    #1a1a1a 32px,
-                    #2a2a2a 34px,
-                    #1a1a1a 36px,
-                    #2a2a2a 38px,
-                    #1a1a1a 40px,
-                    #2a2a2a 42px,
-                    #1a1a1a 44px,
-                    #2a2a2a 46px,
-                    #1a1a1a 48px,
-                    #2a2a2a 50px,
-                    #1a1a1a 52px,
-                    #2a2a2a 54px,
-                    #1a1a1a 56px,
-                    #2a2a2a 58px,
-                    #1a1a1a 60px,
-                    #2a2a2a 62px,
-                    #1a1a1a 64px,
-                    #2a2a2a 66px,
-                    #1a1a1a 68px,
-                    #2a2a2a 70px,
-                    #1a1a1a 72px,
-                    #2a2a2a 74px,
-                    #1a1a1a 76px,
-                    #2a2a2a 78px,
-                    #1a1a1a 80px,
-                    #2a2a2a 82px,
-                    #1a1a1a 84px,
-                    #2a2a2a 86px,
-                    #1a1a1a 88px,
-                    #2a2a2a 90px,
-                    #1a1a1a 92px,
-                    #2a2a2a 94px,
-                    #1a1a1a 96px,
-                    #2a2a2a 98px,
-                    #1a1a1a 100px
+                    #1a1a1a 0px, #2a2a2a 2px, #1a1a1a 4px,
+                    #2a2a2a 6px, #1a1a1a 8px, #2a2a2a 10px,
+                    #1a1a1a 12px, #2a2a2a 14px, #1a1a1a 16px,
+                    #2a2a2a 18px, #1a1a1a 20px, #2a2a2a 22px,
+                    #1a1a1a 24px, #2a2a2a 26px, #1a1a1a 28px,
+                    #2a2a2a 30px, #1a1a1a 32px, #2a2a2a 34px,
+                    #1a1a1a 36px, #2a2a2a 38px, #1a1a1a 40px,
+                    #2a2a2a 42px, #1a1a1a 44px, #2a2a2a 46px,
+                    #1a1a1a 48px, #2a2a2a 50px, #1a1a1a 52px,
+                    #2a2a2a 54px, #1a1a1a 56px, #2a2a2a 58px,
+                    #1a1a1a 60px, #2a2a2a 62px, #1a1a1a 64px,
+                    #2a2a2a 66px, #1a1a1a 68px, #2a2a2a 70px,
+                    #1a1a1a 72px, #2a2a2a 74px, #1a1a1a 76px,
+                    #2a2a2a 78px, #1a1a1a 80px, #2a2a2a 82px,
+                    #1a1a1a 84px, #2a2a2a 86px, #1a1a1a 88px,
+                    #2a2a2a 90px, #1a1a1a 92px, #2a2a2a 94px,
+                    #1a1a1a 96px, #2a2a2a 98px, #1a1a1a 100px
                 ),
                 radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 100%);
             position: relative;
@@ -108,7 +74,6 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            animation: inherit;
         }
         
         .vinyl-text svg {
@@ -117,39 +82,40 @@
         }
         
         .vinyl-text text {
-            fill: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
+            fill: rgba(255, 255, 255, 0.85);
+            font-size: 13px;
             font-weight: bold;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         /* Центральная этикетка с картинкой */
         .vinyl-label {
             position: absolute;
-            width: 90px;
-            height: 90px;
+            width: 95px;
+            height: 95px;
             border-radius: 50%;
             overflow: hidden;
             z-index: 10;
-            box-shadow: 
-                0 0 0 8px #1a1a1a,
-                0 0 0 10px #2a2a2a,
-                0 5px 15px rgba(0,0,0,0.5);
             background: #fff;
+            box-shadow: 
+                0 0 0 6px #1a1a1a,
+                0 0 0 8px #2a2a2a,
+                0 0 0 10px #1a1a1a,
+                0 5px 15px rgba(0,0,0,0.5);
         }
         
         .vinyl-label img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
         }
         
         /* Центральное отверстие */
         .vinyl-hole {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 12px;
+            height: 12px;
             background: #0a0a0a;
             border-radius: 50%;
             z-index: 11;
@@ -209,15 +175,11 @@
                 <div class="vinyl-text">
                     <svg viewBox="0 0 220 220">
                         <defs>
-                            <path id="circlePath" d="
-                                M 110, 40
-                                A 70,70 0 1,1 109.9,40
-                                Z
-                            " />
+                            <path id="circlePath" d="M 110, 35 A 75,75 0 1,1 109.9,35 Z" />
                         </defs>
                         <text>
-                            <textPath href="#circlePath">
-                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • 
+                            <textPath href="#circlePath" startOffset="0%">
+                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • 
                             </textPath>
                         </text>
                     </svg>
@@ -225,7 +187,6 @@
                 
                 <!-- Центральная этикетка с картинкой -->
                 <div class="vinyl-label">
-                    <!-- ЗАМЕНИ src НА ССЫЛКУ НА ТВОЮ КАРТИНКУ -->
                     <img src="label.png" alt="Label">
                 </div>
                 
@@ -282,7 +243,6 @@
                 return;
             }
             
-            // Создаем новый аудио элемент
             audio = new Audio();
             audio.crossOrigin = "anonymous";
             audio.preload = "auto";
@@ -294,7 +254,6 @@
             btn.textContent = '⏳ Загрузка...';
             btn.disabled = true;
             
-            // Пробуем основной поток
             try {
                 await tryPlayStream(streamUrlToUse);
             } catch (error) {
@@ -311,7 +270,6 @@
                 }
             }
             
-            // Если дошли сюда - всё работает
             isPlaying = true;
             btn.textContent = '⏸ Пауза';
             disc.classList.add('spinning');
@@ -353,7 +311,6 @@
             });
         }
         
-        // Обработка ошибок
         if (audio) {
             audio.addEventListener('error', (e) => {
                 console.error('Audio error:', e);
@@ -361,7 +318,6 @@
             });
         }
         
-        // Инициализация
         setStatus('✅ Готово к работе', 'success');
         console.log('[Radio] App initialized');
     </script>
