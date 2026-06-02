@@ -44,7 +44,7 @@
         .btn-play:active { transform: scale(0.95); }
         .btn-play.playing { background-color: #ff3b30; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .error { color: #ff3b30; margin-top: 10px; font-size: 14px; }
+        .error { color: #ff3b30; margin-top: 10px; font-size: 14px; min-height: 20px; }
         audio { display: none; }
     </style>
 </head>
@@ -67,7 +67,7 @@
         tg.ready();
         tg.setHeaderColor('#1c1c1e');
         tg.setBackgroundColor('#1c1c1e');
-        tg.expand(); // Разворачиваем на весь экран
+        tg.expand();
         
         const audio = document.getElementById('radio');
         const playBtn = document.getElementById('playBtn');
@@ -109,7 +109,7 @@
                 }).catch(error => {
                     console.error('Ошибка воспроизведения:', error);
                     playBtn.innerText = '▶ Включить';
-                    errorMsg.textContent = '⚠️ Не удалось запустить поток. Попробуйте ещё раз.';
+                    errorMsg.textContent = '⚠️ Не удалось запустить поток. Проверьте интернет.';
                 });
             }
         }
