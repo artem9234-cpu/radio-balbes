@@ -49,6 +49,7 @@
             height: 100%;
             border-radius: 50%;
             background: 
+                /* Гроты пластинки */
                 repeating-radial-gradient(
                     circle at center,
                     #1a1a1a 0px, #2a2a2a 2px, #1a1a1a 4px,
@@ -85,12 +86,67 @@
             align-items: center;
             justify-content: center;
             box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+            overflow: hidden;
+        }
+        
+        /* БЛИКИ И СВЕЧЕНИЕ */
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 50%;
+            background: 
+                /* Основной блик от света */
+                linear-gradient(135deg, 
+                    rgba(255,255,255,0.15) 0%, 
+                    rgba(255,255,255,0) 40%,
+                    rgba(255,255,255,0) 60%, 
+                    rgba(255,255,255,0.1) 100%
+                );
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        /* Дополнительный блик для эффекта винила */
+        .vinyl::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 40%;
+            background: linear-gradient(180deg,
+                rgba(255,255,255,0.08) 0%,
+                rgba(255,255,255,0) 100%
+            );
+            border-radius: 50%;
+            filter: blur(8px);
+            pointer-events: none;
+            z-index: 4;
+        }
+        
+        /* Анимированный блик при вращении */
+        .disc.spinning .vinyl::before {
+            animation: shimmer 2s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
         
         .vinyl-text {
             position: absolute;
             width: 100%;
             height: 100%;
+            z-index: 6;
         }
         
         .vinyl-text svg {
@@ -120,6 +176,22 @@
                 0 10px 25px rgba(0,0,0,0.6);
         }
         
+        .vinyl-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                rgba(255,255,255,0.3) 0%,
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+        
         .vinyl-label img {
             width: 100%;
             height: 100%;
@@ -134,7 +206,9 @@
             background: #0a0a0a;
             border-radius: 50%;
             z-index: 11;
-            box-shadow: inset 0 0 6px rgba(0,0,0,0.9);
+            box-shadow: 
+                inset 0 0 6px rgba(0,0,0,0.9),
+                0 0 2px rgba(255,255,255,0.1);
         }
         
         @keyframes spin {
