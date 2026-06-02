@@ -82,57 +82,57 @@
                 radial-gradient(circle at center, #2a2a2a 0%, #0a0a0a 100%);
         }
         
-        /* ТОНКИЕ РАДУЖНЫЕ ПЕРЕЛИВЫ — еле заметные */
-        .vinyl::before {
-            content: '';
+        /* СТАТИЧНЫЕ БЛИКИ — как свет падающий на пластинку */
+        .vinyl-shine {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             border-radius: 50%;
-            background: conic-gradient(
-                from 0deg,
-                rgba(255, 80, 80, 0.08),
-                rgba(255, 140, 80, 0.08),
-                rgba(255, 220, 80, 0.08),
-                rgba(180, 255, 80, 0.08),
-                rgba(80, 255, 180, 0.08),
-                rgba(80, 200, 255, 0.08),
-                rgba(120, 120, 255, 0.08),
-                rgba(200, 80, 255, 0.08),
-                rgba(255, 80, 180, 0.08),
-                rgba(255, 80, 80, 0.08)
-            );
-            mask-image: radial-gradient(
-                circle at center,
-                transparent 0%,
-                transparent 35%,
-                rgba(0,0,0,1) 45%,
-                rgba(0,0,0,1) 100%
-            );
-            -webkit-mask-image: radial-gradient(
-                circle at center,
-                transparent 0%,
-                transparent 35%,
-                rgba(0,0,0,1) 45%,
-                rgba(0,0,0,1) 100%
-            );
-            z-index: 3;
             pointer-events: none;
-        }
-        
-        /* МЯГКИЕ СВЕТОВЫЕ БЛИКИ */
-        .vinyl::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 50%;
+            z-index: 7;
             background: 
-                linear-gradient(
-                    135deg,
-                    rgba(255,255,255,0.12) 0%,
-                    rgba(255,255,255,0) 35%,
-                    rgba(255,255,255,0) 65%,
-                    rgba(255,255,255,0.08) 100%
+                /* Основной широкий блик сверху */
+                linear-gradient(155deg, 
+                    transparent 0%, 
+                    transparent 38%,
+                    rgba(255,255,255,0.08) 43%,
+                    rgba(255,255,255,0.18) 46%,
+                    rgba(255,255,255,0.25) 48%,
+                    rgba(255,255,255,0.18) 50%,
+                    rgba(255,255,255,0.08) 53%,
+                    transparent 58%,
+                    transparent 100%
+                ),
+                /* Узкая яркая полоса */
+                linear-gradient(150deg,
+                    transparent 0%,
+                    transparent 44%,
+                    rgba(255,255,255,0.04) 46%,
+                    rgba(255,255,255,0.12) 47.5%,
+                    rgba(255,255,255,0.04) 49%,
+                    transparent 51%,
+                    transparent 100%
+                ),
+                /* Дополнительная тонкая полоса */
+                linear-gradient(162deg,
+                    transparent 0%,
+                    transparent 41%,
+                    rgba(255,255,255,0.03) 43%,
+                    rgba(255,255,255,0.08) 44.5%,
+                    rgba(255,255,255,0.03) 46%,
+                    transparent 48%,
+                    transparent 100%
+                ),
+                /* Контр-блик снизу для симметрии */
+                linear-gradient(335deg,
+                    transparent 0%,
+                    transparent 88%,
+                    rgba(255,255,255,0.04) 91%,
+                    rgba(255,255,255,0.08) 93%,
+                    rgba(255,255,255,0.04) 95%,
+                    transparent 97%,
+                    transparent 100%
                 );
+            /* Убираем блики из центра (где этикетка) */
             mask-image: radial-gradient(
                 circle at center,
                 transparent 0%,
@@ -147,28 +147,6 @@
                 rgba(0,0,0,1) 45%,
                 rgba(0,0,0,1) 100%
             );
-            z-index: 4;
-            pointer-events: none;
-        }
-        
-        /* ОЧЕНЬ МЕДЛЕННАЯ анимация радуги */
-        .disc.spinning .vinyl::before {
-            animation: rainbowRotate 4s linear infinite;
-        }
-        
-        /* Медленная анимация блеска */
-        .disc.spinning .vinyl::after {
-            animation: shineRotate 3s linear infinite;
-        }
-        
-        @keyframes rainbowRotate {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
-        }
-        
-        @keyframes shineRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         .vinyl-text {
@@ -332,6 +310,8 @@
                 
                 <div class="vinyl-hole"></div>
             </div>
+            <!-- БЛИКИ ОТДЕЛЬНО — не вращаются вместе с диском -->
+            <div class="vinyl-shine"></div>
         </div>
         
         <button class="play-btn" id="playBtn" onclick="togglePlay()">▶ Включить</button>
@@ -374,7 +354,7 @@
             
             if (isPlaying) {
                 stopPlayback();
-                setStatus('⏸ Остановлено', '');
+                setStatus(' Остановлено', '');
                 return;
             }
             
@@ -409,7 +389,7 @@
             btn.textContent = '⏸ Пауза';
             btn.classList.add('playing');
             disc.classList.add('spinning');
-            setStatus(usingBackup ? '🔊 Играет (backup)' : '🔊 Играет', 'success');
+            setStatus(usingBackup ? ' Играет (backup)' : '🔊 Играет', 'success');
             btn.disabled = false;
         }
         
