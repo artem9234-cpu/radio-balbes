@@ -142,8 +142,9 @@
         
         .vinyl-text text {
             fill: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
+            letter-spacing: 8px;
         }
         
         .vinyl-label {
@@ -263,18 +264,18 @@
         
         <div class="disc" id="disc">
             <div class="vinyl">
-                <!-- Текст БАЛБЕСЫ по кругу с ИДЕАЛЬНЫМ замкнутым путём -->
+                <!-- РОВНО 3 надписи БАЛБЕСЫ, равномерно распределённые -->
                 <div class="vinyl-text">
                     <svg viewBox="0 0 320 320">
                         <defs>
-                            <!-- Идеально замкнутый круг из двух полукругов -->
+                            <!-- Полный круг из двух полукругов -->
                             <path id="circlePath" d="M 160, 50 A 110,110 0 0,1 160, 270 A 110,110 0 0,1 160, 50" />
                         </defs>
                         <text>
                             <textPath href="#circlePath" 
                                       startOffset="0%" 
                                       textLength="691" 
-                                      lengthAdjust="spacing">БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ</textPath>
+                                      lengthAdjust="spacing">БАЛБЕСЫ БАЛБЕСЫ БАЛБЕСЫ</textPath>
                         </text>
                     </svg>
                 </div>
