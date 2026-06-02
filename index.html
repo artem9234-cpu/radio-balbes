@@ -41,7 +41,6 @@
             height: 100%;
             border-radius: 50%;
             background: 
-                /* Гроты пластинки */
                 repeating-radial-gradient(
                     circle at center,
                     #1a1a1a 0px,
@@ -96,7 +95,6 @@
                     #2a2a2a 98px,
                     #1a1a1a 100px
                 ),
-                /* Основной цвет винила */
                 radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 100%);
             position: relative;
             display: flex;
@@ -126,26 +124,25 @@
             text-transform: uppercase;
         }
         
-        /* Центральная этикетка */
+        /* Центральная этикетка с картинкой */
         .vinyl-label {
             position: absolute;
             width: 90px;
             height: 90px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
+            z-index: 10;
             box-shadow: 
                 0 0 0 8px #1a1a1a,
                 0 0 0 10px #2a2a2a,
                 0 5px 15px rgba(0,0,0,0.5);
-            z-index: 10;
+            background: #fff;
         }
         
-        .vinyl-label::before {
-            content: '📻';
-            font-size: 36px;
+        .vinyl-label img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         /* Центральное отверстие */
@@ -226,8 +223,11 @@
                     </svg>
                 </div>
                 
-                <!-- Центральная этикетка -->
-                <div class="vinyl-label"></div>
+                <!-- Центральная этикетка с картинкой -->
+                <div class="vinyl-label">
+                    <!-- ЗАМЕНИ src НА ССЫЛКУ НА ТВОЮ КАРТИНКУ -->
+                    <img src="label.png" alt="Label">
+                </div>
                 
                 <!-- Центральное отверстие -->
                 <div class="vinyl-hole"></div>
