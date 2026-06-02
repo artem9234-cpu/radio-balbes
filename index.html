@@ -19,15 +19,150 @@
         }
         .container { width: 100%; max-width: 400px; text-align: center; }
         h1 { font-size: 28px; margin-bottom: 10px; }
+        
+        /* Виниловая пластинка */
         .disc {
-            width: 200px; height: 200px; margin: 30px auto;
-            background: conic-gradient(#667eea, #764ba2, #f093fb, #667eea);
+            width: 220px;
+            height: 220px;
+            margin: 30px auto;
+            position: relative;
             border-radius: 50%;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            display: flex; align-items: center; justify-content: center;
+            box-shadow: 
+                0 10px 40px rgba(0,0,0,0.5),
+                inset 0 0 0 2px rgba(255,255,255,0.1);
         }
-        .disc.spinning { animation: spin 2s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .disc.spinning {
+            animation: spin 2s linear infinite;
+        }
+        
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                /* Гроты пластинки */
+                repeating-radial-gradient(
+                    circle at center,
+                    #1a1a1a 0px,
+                    #2a2a2a 2px,
+                    #1a1a1a 4px,
+                    #2a2a2a 6px,
+                    #1a1a1a 8px,
+                    #2a2a2a 10px,
+                    #1a1a1a 12px,
+                    #2a2a2a 14px,
+                    #1a1a1a 16px,
+                    #2a2a2a 18px,
+                    #1a1a1a 20px,
+                    #2a2a2a 22px,
+                    #1a1a1a 24px,
+                    #2a2a2a 26px,
+                    #1a1a1a 28px,
+                    #2a2a2a 30px,
+                    #1a1a1a 32px,
+                    #2a2a2a 34px,
+                    #1a1a1a 36px,
+                    #2a2a2a 38px,
+                    #1a1a1a 40px,
+                    #2a2a2a 42px,
+                    #1a1a1a 44px,
+                    #2a2a2a 46px,
+                    #1a1a1a 48px,
+                    #2a2a2a 50px,
+                    #1a1a1a 52px,
+                    #2a2a2a 54px,
+                    #1a1a1a 56px,
+                    #2a2a2a 58px,
+                    #1a1a1a 60px,
+                    #2a2a2a 62px,
+                    #1a1a1a 64px,
+                    #2a2a2a 66px,
+                    #1a1a1a 68px,
+                    #2a2a2a 70px,
+                    #1a1a1a 72px,
+                    #2a2a2a 74px,
+                    #1a1a1a 76px,
+                    #2a2a2a 78px,
+                    #1a1a1a 80px,
+                    #2a2a2a 82px,
+                    #1a1a1a 84px,
+                    #2a2a2a 86px,
+                    #1a1a1a 88px,
+                    #2a2a2a 90px,
+                    #1a1a1a 92px,
+                    #2a2a2a 94px,
+                    #1a1a1a 96px,
+                    #2a2a2a 98px,
+                    #1a1a1a 100px
+                ),
+                /* Основной цвет винила */
+                radial-gradient(circle at center, #2a2a2a 0%, #1a1a1a 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+        
+        /* Текст БАЛБЕСЫ по кругу */
+        .vinyl-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: inherit;
+        }
+        
+        .vinyl-text svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .vinyl-text text {
+            fill: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        /* Центральная этикетка */
+        .vinyl-label {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 0 0 8px #1a1a1a,
+                0 0 0 10px #2a2a2a,
+                0 5px 15px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+        
+        .vinyl-label::before {
+            content: '📻';
+            font-size: 36px;
+        }
+        
+        /* Центральное отверстие */
+        .vinyl-hole {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #0a0a0a;
+            border-radius: 50%;
+            z-index: 11;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
         .track-info {
             font-size: 20px;
             font-weight: 600;
@@ -70,7 +205,34 @@
 <body>
     <div class="container">
         <h1>📻 Радио Балбес</h1>
-        <div class="disc" id="disc"><div style="width:60px;height:60px;background:rgba(0,0,0,0.3);border-radius:50%"></div></div>
+        
+        <div class="disc" id="disc">
+            <div class="vinyl">
+                <!-- Текст БАЛБЕСЫ по кругу -->
+                <div class="vinyl-text">
+                    <svg viewBox="0 0 220 220">
+                        <defs>
+                            <path id="circlePath" d="
+                                M 110, 40
+                                A 70,70 0 1,1 109.9,40
+                                Z
+                            " />
+                        </defs>
+                        <text>
+                            <textPath href="#circlePath">
+                                БАЛБЕСЫ • БАЛБЕСЫ • БАЛБЕСЫ • 
+                            </textPath>
+                        </text>
+                    </svg>
+                </div>
+                
+                <!-- Центральная этикетка -->
+                <div class="vinyl-label"></div>
+                
+                <!-- Центральное отверстие -->
+                <div class="vinyl-hole"></div>
+            </div>
+        </div>
         
         <div class="track-info" id="track-name">Нажмите "Включить"</div>
         <div class="artist-info" id="artist-name">для начала прослушивания</div>
