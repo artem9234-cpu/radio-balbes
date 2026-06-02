@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Радио Балбес</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: var(--tg-theme-bg-color, #1c1c1e);
+            color: var(--tg-theme-text-color, #ffffff);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container { text-align: center; padding: 20px; width: 80%; }
+        h1 { font-size: 24px; margin-bottom: 5px; color: var(--tg-theme-link-color, #007aff); }
+        .status { font-size: 14px; opacity: 0.7; margin-bottom: 30px; }
+        .disc {
+            width: 200px; height: 200px;
+            background: conic-gradient(#333, #555, #333);
+            border-radius: 50%;
+            border: 5px solid #000;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .disc.spinning { animation: spin 3s linear infinite; }
+        .center-circle { width: 60px; height: 60px; background: #111; border-radius: 50%; border: 2px solid #444; }
+        .track-info { font-size: 18px; font-weight: bold; margin-bottom: 10px; min-height: 44px; }
+        .artist-info { font-size: 14px; color: var(--tg-theme-hint-color, #8e8e93); margin-bottom: 30px; }
+        .btn-play {
+            background-color: var(--tg-theme-button-color, #007aff);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none; border-radius: 50px;
+            padding: 15px 40px; font-size: 18px; font-weight: bold;
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .btn-play:active { transform: scale(0.95); }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        audio { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📻 Радио Балбес</h1>
+        <div class="status">Record Big Hits • Live</div>
+        <div class="disc" id="disc"><div class="center-circle"></div></div>
+        <div class="track-info" id="track-name">Загрузка...</div>
+        <div class="artist-info" id="artist-name">Подожди...</div>
+        <button class="btn-play" id="playBtn" onclick="togglePlay()">▶ Включить</button>
+    </div>
+    <audio id="radio" src="https://radiorecord.hostingradio.ru/bighits.aacp"></audio>
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.setHeaderColor('#1c1c1e');
+        tg.setBackgroundColor('#1c1c1e');
+        const audio = document.getElementById('radio');
+        const playBtn = document.getElementById('playBtn');
+        const disc = document.getElementById('disc');
+        const trackNameEl = document.getElementById('track-name');
+        const artistNameEl = document.getElementById('artist-name');
+        let isPlaying = false;
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                playBtn.innerText = '▶ Включить';
+                playBtn.style.backgroundColor = 'var(--tg-theme-button-color)';
+                disc.classList.remove('spinning');
+            } else {
+                audio.play().catch(e => { console.error(e); tg.showAlert('Не удалось запустить звук :('); });
+                playBtn.innerText = '⏸ Пауза';
+                playBtn.style.backgroundColor = '#ff3b30';
+                disc.classList.add('spinning');
+            }
+            isPlaying = !isPlaying;
+        }
+        async function updateTrackInfo() {
+            try {
+                const response = await fetch('https://radiorecord.ru/api/station/history/?id=bighits');
+                const data = await response.json();
+                if (data && data.items && data.items.length > 0) {
+                    const currentTrack = data.items[0];
+                    const parts = currentTrack.name.split(' - ');
+                    let artist = 'Radio Record';
+                    let title = currentTrack.name;
+                    if (parts.length > 1) { artist = parts[0]; title = parts.slice(1).join(' - '); }
+                    trackNameEl.innerText = title;
+                    artistNameEl.innerText = artist;
+                }
+            } catch (error) {
+                trackNameEl.innerText = 'Radio Record';
+                artistNameEl.innerText = 'Big Hits';
+            }
+        }
+        updateTrackInfo();
+        setInterval(updateTrackInfo, 10000);
+    </script>
+</body>
+</html>
